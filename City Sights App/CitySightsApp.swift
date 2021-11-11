@@ -8,10 +8,12 @@
 import SwiftUI
 
 @main
-struct City_Sights_App: App {
+struct CitySightsApp: App {
     var body: some Scene {
         WindowGroup {
+            // Make child views able to inherit from this ContentModel object
             LaunchView()
+                .environmentObject(ContentModel())
         }
     }
 }
