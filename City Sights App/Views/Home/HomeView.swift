@@ -56,6 +56,8 @@ struct HomeView: View {
                     BusinessList()
                     
                 }
+                    // Add padding to all of the elements in our VSTack
+                    .padding([.horizontal, .top])
                 
                 
             }

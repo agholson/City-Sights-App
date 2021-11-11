@@ -9,18 +9,23 @@ import Foundation
 
 /*
  Business model that corresponds to business data received from the Yelp API
+ 
+ ObservableObject allows us to update views, as soon as Business's properties change
  */
-struct Business: Decodable, Identifiable {
+class Business: Decodable, Identifiable, ObservableObject {
+    
+    // Holds the image, we download later
+    @Published var imageData: Data?
     
     // Make all of our attributes optional, in case the API doesn't return one of them
     var id: String?
     var alias: String?
     var name: String?
     // Note that the property names must correspond exactly to the JSON key name. We will change this later though
-    var image_url: String?
-    var is_closed: Bool?
+    var imageUrl: String?
+    var isClosed: Bool?
     var url: String?
-    var review_count: Int?
+    var reviewCount: Int?
     var categories: [Category]?
     var rating: Double?
     var coordinates: Coordinates?
@@ -29,8 +34,68 @@ struct Business: Decodable, Identifiable {
     var price: String?
     var location: Location?
     var phone: String?
-    var display_phone: String?
+    var displayPhone: String?
     var distance: Double?
+    
+    // Maps keys that do not conform to came case for us here
+    enum CodingKeys: String, CodingKey {
+        case imageUrl = "image_url"
+        case isClosed = "is_closed"
+        case reviewCount = "review_count"
+        case displayPhone = "display_phone"
+        
+        // However, we must have these keys defined as well
+        case id
+        case alias
+        case name
+        case url
+        case categories
+        case rating
+        case coordinates
+        case transactions
+        case price
+        case location
+        case phone
+        case distance
+    }
+    
+    // Downloads the associated image for each business
+    func getImageData() {
+        
+        // Check that URL is not nil
+        guard imageUrl != nil else {
+            return
+        }
+        
+        // Download data for the image
+        if let url = URL(string: imageUrl!) {
+            
+            // Get a session
+            let session = URLSession.shared
+            
+            let dataTask = session.dataTask(with: url) { data, response, error in
+                
+                // If no error, then set the image data
+                if error == nil {
+                    
+                    DispatchQueue.main.async {
+                        // Set the image property here
+                        self.imageData = data
+                        
+                    }
+                    
+                }
+                
+            }
+            
+            dataTask.resume()
+            
+            
+        }
+        
+        
+    }
+    
 }
 
 struct Location: Decodable {
@@ -38,10 +103,23 @@ struct Location: Decodable {
     var address2: String?
     var address3: String?
     var city: String?
-    var zip_code: String?
+    var zipCode: String?
     var country: String?
     var state: String?
     var displayAddress: [String]?
+    
+    enum CodingKeys: String, CodingKey {
+        case zipCode = "zip_code"
+        case displayAddress = "display_address"
+        
+        case address1
+        case address2
+        case address3
+        case city
+        case country
+        case state
+    }
+    
 }
 
 /*

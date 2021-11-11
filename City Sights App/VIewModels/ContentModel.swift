@@ -147,6 +147,20 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
                         // Decode the response into a BusinessSearch object
                         let result = try decoder.decode(BusinessSearch.self, from: data!)
                         
+                        // Sort businesses based on closest distance
+                        var businesses = result.businesses
+                        
+                        businesses.sort { (b1, b2) -> Bool in  
+                            // if first business is closer, then return that one, place it ahead in the list
+                            return b1.distance ?? 0 < b2.distance ?? 0
+                        }
+                        
+                        
+                        // MARK: Download the images
+                        for b in businesses {
+                            b.getImageData()
+                        }
+                        
                         // Assigning to properties from the background thread (network dataTask)
                         DispatchQueue.main.async {
                             // Decode into restaurant or sight properties
@@ -163,9 +177,9 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
                             // Use Case versus the if statements above for a cleaner, more scalable look
                             switch category {
                             case Constants.sightsKey:
-                                self.sights = result.businesses
+                                self.sights = businesses
                             case Constants.restaurantsKey:
-                                self.restaurants = result.businesses
+                                self.restaurants = businesses
                             // Does this if none of the other cases match
                             default:
                                 print("Error: could not decode into category not defined. Category supplied: \(category)")

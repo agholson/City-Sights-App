@@ -12,7 +12,8 @@ struct BusinessList: View {
     @EnvironmentObject var model: ContentModel
     
     var body: some View {
-        ScrollView {
+        // Display our lists in a scroll view, and get rid of the right indicator
+        ScrollView(showsIndicators: false) {
             
             // Pinned Views keeps the headers at the top, like in Excel, where you scroll down and its still visible
             LazyVStack(alignment: .leading, pinnedViews: [.sectionHeaders]) {

@@ -21,20 +21,7 @@ struct BusinessSection: View {
         
             ForEach(businesses) { business in
                 
-                HStack {
-                    // Name
-                    Text(business.name ?? "")
-                        .fontWeight(.bold)
-                    
-                    Text("\(business.rating ?? 0)")
-                    
-                    // Rating
-                    Image(systemName: "star.square.fill")
-                        .foregroundColor(.red)
-                    
-                }
-                
-                Divider()
+                BusinessRow(business: business)
                 
             }
             

@@ -39,9 +39,9 @@ and the time it took to grab the response along with much more data.
 ![Proxyman stats page](img/proxy_man_stats.png)
 
 
-
-
-
 # App Design
+## HomeView
+This view displays a list of restaurants as well as sights in the area based on the closest distance to the user.
 
+![HomeView screenshot](img/home_view.png)
 
