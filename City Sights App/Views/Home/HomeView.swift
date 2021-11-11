@@ -1,0 +1,77 @@
+//
+//  HomeView.swift
+//  City Sights App
+//
+//  Created by Shepherd on 11/11/21.
+//
+
+import SwiftUI
+
+struct HomeView: View {
+    
+    @EnvironmentObject var model: ContentModel
+    
+    // Tracks whether/ not to show the map view
+    @State var isMapShowing = false
+    
+    var body: some View {
+        
+        
+        if model.restaurants.count != 0 || model.sights.count != 0 {
+            
+            // Determine if we show list or map data
+            if isMapShowing {
+                // MARK: Site Map
+                // show map data
+            }
+            else {
+                // MARK: List Businesses
+                // Show list of restaurants
+                
+                VStack(alignment: .leading) {
+                    
+                    // MARK: Show location and toggle map button
+                    HStack {
+                        // Display map icon
+                        Image(systemName: "location")
+                        
+                        // Display the city name and state
+                        Text("\(model.restaurants.first?.location?.city ?? ""), \(model.restaurants.first?.location?.state ?? "")")
+                        
+                        // Use Spacer to push elements left and right
+                        Spacer()
+                        
+                        // Display city map view
+                        Button {
+                            // Make the map view show on click
+                            isMapShowing = true
+                        } label: {
+                            Text("Switch to map view")
+                        }
+                    }
+                    
+                    Divider()
+                    
+                    // MARK: Display list of restaurants
+                    BusinessList()
+                    
+                }
+                
+                
+            }
+            
+        }
+        // If there are no restaurants or sites, then show a loading bar
+        else {
+            // Still waiting for data from the Yelp API
+            ProgressView()
+        }
+        
+    }
+}
+
+struct HomeView_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView()
+    }
+}

@@ -10,7 +10,7 @@ import Foundation
 /*
  Business model that corresponds to business data received from the Yelp API
  */
-struct Business: Decodable {
+struct Business: Decodable, Identifiable {
     
     // Make all of our attributes optional, in case the API doesn't return one of them
     var id: String?

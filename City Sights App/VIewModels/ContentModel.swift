@@ -22,6 +22,10 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
     // Create a CoreLocation Manager object
     var locationManager = CLLocationManager()
     
+    // Default to not determined authorization status
+    @Published var authorizationState = CLAuthorizationStatus.notDetermined
+    
+    // Initialize to empty business arrays
     @Published var restaurants = [Business]()
     @Published var sights = [Business]()
     
@@ -43,7 +47,11 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
      Checks the status of the CLLocationManager to determine, if user granted us access to the location
      */
     func locationManagerDidChangeAuthorization(_ manager: CLLocationManager) {
-        // Check the current status of authroization
+        
+        // Update the authorization status
+        authorizationState = locationManager.authorizationStatus
+        
+        // Check the current status of authorization
         if locationManager.authorizationStatus == .authorizedAlways ||
             locationManager.authorizationStatus == .authorizedWhenInUse {
             

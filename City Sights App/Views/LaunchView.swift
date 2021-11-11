@@ -8,9 +8,28 @@
 import SwiftUI
 
 struct LaunchView: View {
+    
+    // Inherit our ContentModel, which contains everything
+    @EnvironmentObject var model: ContentModel
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        
+        // Detect the authorization status by geolocating the user
+        if model.authorizationState == .notDetermined {
+            // If undetermined show onboarding screen
+        }
+        else if model.authorizationState == .authorizedWhenInUse
+                    || model.authorizationState == .authorizedAlways {
+            // SHow the HomeView
+            HomeView()
+        }
+        else {
+            // if denied show view that needs this
+            Text("")
+        }
+        
+        Text("")
+        
     }
 }
 
