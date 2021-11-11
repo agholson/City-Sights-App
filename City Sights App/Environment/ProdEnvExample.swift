@@ -6,9 +6,9 @@ import Foundation
 
 struct YelpAPICreds {
     
-    let client = "<insertClientStringHere"
+    static let client = "<insertClientStringHere"
     
-    let apiKey = "insertApiKeyHere"
+    static let apiKey = "insertApiKeyHere"
      
 }
  */

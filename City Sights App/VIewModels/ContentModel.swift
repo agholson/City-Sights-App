@@ -22,6 +22,9 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
     // Create a CoreLocation Manager object
     var locationManager = CLLocationManager()
     
+    @Published var restaurants = [Business]()
+    @Published var sights = [Business]()
+    
     // Overrides the NSObject's init method
     override init() {
         // Call the init of the superclass, the NSObject
@@ -55,8 +58,8 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
     }
     
     /*
-     Another delegate we handle, which displays the location of the user.
-     This function keeps getting the user's updated location, unless explicitly told to stop
+     Another delegate we handle, which displays the location of the user. It will also call the Yelp API to get a set of the businesses
+     This function keeps getting the user's updated location, unless explicitly told to stop.
      */
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -69,10 +72,10 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
             
             // MARK: Call Yelp API
             // Grab the arts category
-//            getBusinesses(category: "arts", location: userLocation!)
+            getBusinesses(category: Constants.sightsKey, location: userLocation!)
             
-            // Grabs the user location
-            getBusinesses(category: "restaurants", location: userLocation!)
+            // Grabs the restaurants in the area
+            getBusinesses(category: Constants.restaurantsKey, location: userLocation!)
         }
         
 //        print(locations.first ?? "No location yet")
@@ -85,7 +88,9 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
     
     // MARK: Yelp API Methods
     
-    
+    /*
+     Calls the Yelp API to get businesses based on the category and location given
+     */
     func getBusinesses(category:String, location: CLLocation) {
         // Create URL with the Yelp endpoint for our location
         // Reference: https://www.yelp.com/developers/documentation/v3/business_search
@@ -95,7 +100,7 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
         let url = URL(string: urlString)
         */
         // Create URLComponents object with base API string
-        var urlComponents = URLComponents(string: "https://api.yelp.com/v3/businesses/search")
+        var urlComponents = URLComponents(string: Constants.apiUrl)
         
         // Add the query parameters
         urlComponents?.queryItems = [
@@ -115,10 +120,8 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
             request.httpMethod = "GET"
             
             // See ProdEnvExample on how to insert your API credentials
-            let apiCreds = YelpAPICreds()
-            
             // Add Authorization headers with our API key
-            request.addValue("Bearer \(apiCreds.apiKey)", forHTTPHeaderField: "Authorization")
+            request.addValue("Bearer \(YelpAPICreds.apiKey)", forHTTPHeaderField: "Authorization")
             
             // Get URLSession
             let session = URLSession.shared
@@ -128,7 +131,47 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
                 
                 // Check that no errors occurred
                 if error == nil {
-                    print(response)
+                   
+                    // MARK: Parse API Response into BusinessSearch object
+                    let decoder = JSONDecoder()
+                    
+                    do {
+                        // Decode the response into a BusinessSearch object
+                        let result = try decoder.decode(BusinessSearch.self, from: data!)
+                        
+                        // Assigning to properties from the background thread (network dataTask)
+                        DispatchQueue.main.async {
+                            // Decode into restaurant or sight properties
+//                            if category == Constants.restaurantsKey {
+//                                self.restaurants = result.businesses
+//                            }
+//                            else if category == Constants.sightsKey {
+//                                self.sights = result.businesses
+//                            }
+//                            else {
+//                                print("Error: called a category not accepted. Category supplied: \(category)")
+//                            }
+                            
+                            // Use Case versus the if statements above for a cleaner, more scalable look
+                            switch category {
+                            case Constants.sightsKey:
+                                self.sights = result.businesses
+                            case Constants.restaurantsKey:
+                                self.restaurants = result.businesses
+                            // Does this if none of the other cases match
+                            default:
+                                print("Error: could not decode into category not defined. Category supplied: \(category)")
+                                break
+                            }
+                            
+                        }
+                       
+                    }
+                    catch {
+                        // Print any decode errors
+                        print(error)
+                    }
+                    
                 }
                 
                 
