@@ -1,2 +1,4 @@
 *.pbxproj
-*ProdEnv.swift
+City Sights App/Environment/ProdEnv.swift
+City Sights App.xcodeproj/project.pbxproj
+City Sights App.xcodeproj/xcuserdata/shepherd.xcuserdatad/xcdebugger/

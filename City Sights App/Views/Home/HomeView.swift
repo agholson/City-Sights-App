@@ -24,7 +24,8 @@ struct HomeView: View {
                 // Determine if we show list or map data
                 if isMapShowing {
                     // MARK: Site Map
-                    // show map data
+                    BusinessMap()
+                        .ignoresSafeArea() // Makes the map use the full screen
                 }
                 else {
                     // MARK: List Businesses
