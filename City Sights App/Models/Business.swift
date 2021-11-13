@@ -96,6 +96,16 @@ class Business: Decodable, Identifiable, ObservableObject {
         
     }
     
+    func getTestData() -> Business {
+        let b = Business()
+        
+        // TODO: Set all of the business parameters
+        
+        
+        // Return the business
+        return b
+    }
+    
 }
 
 struct Location: Decodable {

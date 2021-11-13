@@ -45,3 +45,10 @@ This view displays a list of restaurants as well as sights in the area based on 
 
 ![HomeView screenshot](img/home_view.png)
 
+
+## Business Detail View
+Shows details on the business itself, closed/ open, hours, phone, etc.
+
+### Launching Other Apps
+You can use one of the URLSchemes shown in the following document in order to open the phone, Messages,
+Maps, or other app: https://developer.apple.com/documentation/swiftui/link.  

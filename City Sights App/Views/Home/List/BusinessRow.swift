@@ -53,6 +53,7 @@ struct BusinessRow: View {
             }
             
         }
+        .foregroundColor(.black) // Makes links appear black
         
         Divider()
         

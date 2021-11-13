@@ -19,46 +19,50 @@ struct HomeView: View {
         
         if model.restaurants.count != 0 || model.sights.count != 0 {
             
-            // Determine if we show list or map data
-            if isMapShowing {
-                // MARK: Site Map
-                // show map data
-            }
-            else {
-                // MARK: List Businesses
-                // Show list of restaurants
+            NavigationView {
                 
-                VStack(alignment: .leading) {
-                    
-                    // MARK: Show location and toggle map button
-                    HStack {
-                        // Display map icon
-                        Image(systemName: "location")
+                // Determine if we show list or map data
+                if isMapShowing {
+                    // MARK: Site Map
+                    // show map data
+                }
+                else {
+                    // MARK: List Businesses
+                    // Show list of restaurants as child view to the Navigation View
+                    VStack(alignment: .leading) {
                         
-                        // Display the city name and state
-                        Text("\(model.restaurants.first?.location?.city ?? ""), \(model.restaurants.first?.location?.state ?? "")")
-                        
-                        // Use Spacer to push elements left and right
-                        Spacer()
-                        
-                        // Display city map view
-                        Button {
-                            // Make the map view show on click
-                            isMapShowing = true
-                        } label: {
-                            Text("Switch to map view")
+                        // MARK: Show location and toggle map button
+                        HStack {
+                            // Display map icon
+                            Image(systemName: "location")
+                            
+                            // Display the city name and state
+                            Text("\(model.restaurants.first?.location?.city ?? ""), \(model.restaurants.first?.location?.state ?? "")")
+                            
+                            // Use Spacer to push elements left and right
+                            Spacer()
+                            
+                            // Display city map view
+                            Button {
+                                // Make the map view show on click
+                                isMapShowing = true
+                            } label: {
+                                Text("Switch to map view")
+                            }
                         }
+                        
+                        Divider()
+                        
+                        // MARK: Display list of restaurants
+                        BusinessList()
+                        
                     }
+                        // Add padding to all of the elements in our VSTack
+                        .padding([.horizontal, .top])
+                        .navigationBarHidden(true) // Add modifier to child view, not to the NavigationView itself
                     
-                    Divider()
-                    
-                    // MARK: Display list of restaurants
-                    BusinessList()
                     
                 }
-                    // Add padding to all of the elements in our VSTack
-                    .padding([.horizontal, .top])
-                
                 
             }
             

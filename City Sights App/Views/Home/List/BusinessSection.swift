@@ -21,7 +21,9 @@ struct BusinessSection: View {
         
             ForEach(businesses) { business in
                 
-                BusinessRow(business: business)
+                NavigationLink(destination: BusinessDetailView(business: business)) {
+                    BusinessRow(business: business)
+                }
                 
             }
             
