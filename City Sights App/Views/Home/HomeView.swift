@@ -14,6 +14,9 @@ struct HomeView: View {
     // Tracks whether/ not to show the map view
     @State var isMapShowing = false
     
+    // Business used in the MapView
+    @State var selectedBusiness: Business?
+    
     var body: some View {
         
         
@@ -23,9 +26,19 @@ struct HomeView: View {
                 
                 // Determine if we show list or map data
                 if isMapShowing {
-                    // MARK: Site Map
-                    BusinessMap()
+                    
+                    // MARK: Map of Places
+                    
+                    BusinessMap(selectedBusiness: $selectedBusiness)
                         .ignoresSafeArea() // Makes the map use the full screen
+                        .sheet(item: $selectedBusiness) { business in
+                            
+                            // Create a business detail view instance for the selected business
+                            BusinessDetailView(business: business)
+                            
+                            
+                            
+                        }
                 }
                 else {
                     // MARK: List Businesses

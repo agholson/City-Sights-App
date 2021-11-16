@@ -15,6 +15,10 @@ struct BusinessMap: UIViewRepresentable {
     
     @EnvironmentObject var model: ContentModel
     
+    // Binding that allows us to read/ write to the state property, which triggers the .sheet in the parent HomeView to display the business
+    // Detail page
+    @Binding var selectedBusiness: Business?
+    
     /*
      Computed property displays the business name, and an information icon when called
      */
@@ -103,7 +107,8 @@ struct BusinessMap: UIViewRepresentable {
      This makeCoordinator is an optional method with the MKMapView
      */
     func makeCoordinator() -> Coordinator {
-        return Coordinator()
+        // Passes the business map to its own coordinator
+        return Coordinator(map: self)
     }
     
     /*
@@ -114,6 +119,13 @@ struct BusinessMap: UIViewRepresentable {
      Inherits from NSObject, because MKMapViewDelegate needs to be subclass of the NSObject class.
      */
     class Coordinator: NSObject, MKMapViewDelegate {
+        
+        var map: BusinessMap
+        
+        // Used to access the business map's annotations
+        init(map: BusinessMap) {
+            self.map = map
+        }
      
         // Creates an annotation with the business name for every single annotation on the map
         func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -148,6 +160,25 @@ struct BusinessMap: UIViewRepresentable {
             
             // Return it
             return annotationView
+            
+        }
+        
+        // Handle tapped events for the business
+        func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+            
+            // User tapped on the annotation view
+            
+            // Get the business object this annotation represents
+            // Loop through the businesses in the mode to find a matching title
+            for business in map.model.restaurants + map.model.sights {
+                if business.name == view.annotation?.title {
+                    // Set the selected business property to this tapped business
+                    map.selectedBusiness = business
+                    
+                    return
+                    
+                }
+            }
             
         }
         
