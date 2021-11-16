@@ -28,17 +28,48 @@ struct HomeView: View {
                 if isMapShowing {
                     
                     // MARK: Map of Places
+                    ZStack(alignment: .top) {
+                        BusinessMap(selectedBusiness: $selectedBusiness)
+                            .ignoresSafeArea() // Makes the map use the full screen
+                            .sheet(item: $selectedBusiness) { business in
+                                
+                                // Create a business detail view instance for the selected business
+                                BusinessDetailView(business: business)
                     
-                    BusinessMap(selectedBusiness: $selectedBusiness)
-                        .ignoresSafeArea() // Makes the map use the full screen
-                        .sheet(item: $selectedBusiness) { business in
+                            }
+                        
+                        // Rectangle overlay to switch back to the list view
+                        ZStack {
+                            Rectangle()
+                                .foregroundColor(.white)
+                                .cornerRadius(5)
+                                .frame(height: 48)
                             
-                            // Create a business detail view instance for the selected business
-                            BusinessDetailView(business: business)
-                            
-                            
+                            HStack {
+                                // Display map icon
+                                Image(systemName: "location")
+                                
+                                // Display the city name and state
+                                Text("\(model.restaurants.first?.location?.city ?? ""), \(model.restaurants.first?.location?.state ?? "")")
+                                
+                                // Use Spacer to push elements left and right
+                                Spacer()
+                                
+                                // Display city map list
+                                Button {
+                                    // Make the list view show on button click
+                                    isMapShowing = false
+                                } label: {
+                                    Text("Switch to list view")
+                                }
+                            }
+                            .padding()
                             
                         }
+                        .padding()
+                        
+                    }
+                    .navigationBarHidden(true) // Hides extra Navigation title space in the NavigationView, because the NavigationTitle is specified in the child view
                 }
                 else {
                     // MARK: List Businesses
