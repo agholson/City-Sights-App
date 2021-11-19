@@ -11,6 +11,9 @@ struct BusinessDetailView: View {
     
     var business: Business
     
+    // Tracks whether/ not to show the directions
+    @State private var showDirections = false
+    
     /*
      Use computed status to display whether/ not the business is open. Otherwise, it would appear like true, or false
      */
@@ -68,21 +71,7 @@ struct BusinessDetailView: View {
             Group {
                 
                 // MARK: Business name and address
-                // Business name
-                Text(business.name ?? "")
-                    .font(.largeTitle)
-                    .padding()
-                
-                // Loop through the displayAddress
-                if business.location?.displayAddress != nil { // only do this, if these are not nil
-                    ForEach(business.location!.displayAddress!, id: \.self) { displayLine in
-                        Text(displayLine)
-                            .padding(.horizontal) // Only add padding left/ right
-                    }
-                }
-        
-                // Star rating - the 1.5, 4.5 rating from the API corresponds to the image name
-                Image("regular_\(business.rating ?? 0)")
+               BusinessTitle(business: business)
                     .padding()
                 
                 Divider()
@@ -143,7 +132,8 @@ struct BusinessDetailView: View {
                 
                 // MARK: Get Directions Button
                 Button {
-                    // TODO: MapView()
+                    // Show directions
+                    showDirections = true 
                 } label: {
                     ZStack {
                         
@@ -159,6 +149,10 @@ struct BusinessDetailView: View {
                     }
                 }
                 .padding()
+                // This pops the view up from below, versus going to an entirely new view
+                .sheet(isPresented: $showDirections) {
+                    DirectionsView(business: business)
+                }
 
             
             }

@@ -52,3 +52,15 @@ Shows details on the business itself, closed/ open, hours, phone, etc.
 ### Launching Other Apps
 You can use one of the URLSchemes shown in the following document in order to open the phone, Messages,
 Maps, or other app: https://developer.apple.com/documentation/swiftui/link.  
+
+### DirectionsView
+In a Link, we can open an Apple map by passing in one of these URL schemes:
+ https://developer.apple.com/library/archive/featuredarticles/iPhoneURLScheme_Reference/MapLinks/MapLinks.html. 
+
+For example, we use the one in this project for latitude/ longitude:
+```
+http://maps.apple.com/?ll=50.894967,4.341626
+```
+
+Meanwhile, if we want calculated directions we refer to the `MKDirections` class: 
+https://developer.apple.com/documentation/mapkit/mkdirections.
