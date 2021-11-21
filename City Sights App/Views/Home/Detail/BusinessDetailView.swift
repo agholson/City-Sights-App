@@ -71,10 +71,15 @@ struct BusinessDetailView: View {
             Group {
                 
                 // MARK: Business name and address
-               BusinessTitle(business: business)
-                    .padding()
-                
-                Divider()
+                HStack {
+                   BusinessTitle(business: business)
+                        .padding()
+                    Spacer()
+                    
+                    YelpAttribution(link: business.url!)
+                }
+                DashedDivider()
+                    .padding(.horizontal)
                 
                 // MARK: Phone
                 HStack {
@@ -95,7 +100,8 @@ struct BusinessDetailView: View {
                 }
                 .padding() // Generates extra space to make image smaller
                 
-                Divider()
+                DashedDivider()
+                    .padding(.horizontal)
                 
                 // MARK: Reviews
                 HStack {
@@ -113,7 +119,8 @@ struct BusinessDetailView: View {
                 }
                 .padding()
                 
-                Divider()
+                DashedDivider()
+                    .padding(.horizontal)
                 
                 // MARK: Website
                 HStack {

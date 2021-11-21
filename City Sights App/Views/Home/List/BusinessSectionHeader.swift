@@ -18,8 +18,10 @@ struct BusinessSectionHeader: View {
         
         ZStack(alignment: .leading) {
             
+            // Make the rectangle at least as big as the Yelp icon
             Rectangle()
                 .foregroundColor(.white)
+                .frame(height: 45)
             
             Text(title)
                 .font(.headline)

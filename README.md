@@ -64,3 +64,16 @@ http://maps.apple.com/?ll=50.894967,4.341626
 
 Meanwhile, if we want calculated directions we refer to the `MKDirections` class: 
 https://developer.apple.com/documentation/mapkit/mkdirections.
+
+## Launching the Settings from the app
+You can make it, so the app opens the settings page.
+```
+/ Open settings
+if let url = URL(string: UIApplication.openSettingsURLString) {
+
+// Determines whether/ not it can open the URL
+if UIApplication.shared.canOpenURL(url) {
+    // Open the URL 
+    UIApplication.shared.open(url)
+}
+```

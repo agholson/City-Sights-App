@@ -52,10 +52,13 @@ struct BusinessRow: View {
                 
             }
             
+            DashedDivider()
+                .padding(.vertical)
+            
         }
         .foregroundColor(.black) // Makes links appear black
         
-        Divider()
+        
         
     }
 }

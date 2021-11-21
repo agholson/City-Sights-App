@@ -50,7 +50,10 @@ struct HomeView: View {
                                 Image(systemName: "location")
                                 
                                 // Display the city name and state
-                                Text("\(model.restaurants.first?.location?.city ?? ""), \(model.restaurants.first?.location?.state ?? "")")
+                                if let city = model.placemark?.locality,
+                                   let state = model.placemark?.administrativeArea {
+                                    Text("\(city), \(state)")
+                                }
                                 
                                 // Use Spacer to push elements left and right
                                 Spacer()
@@ -81,8 +84,11 @@ struct HomeView: View {
                             // Display map icon
                             Image(systemName: "location")
                             
-                            // Display the city name and state
-                            Text("\(model.restaurants.first?.location?.city ?? ""), \(model.restaurants.first?.location?.state ?? "")")
+                            // Display the city and state 
+                            if let city = model.placemark?.locality,
+                               let state = model.placemark?.administrativeArea {
+                                Text("\(city), \(state)")
+                            }
                             
                             // Use Spacer to push elements left and right
                             Spacer()
@@ -99,8 +105,19 @@ struct HomeView: View {
                         Divider()
                         
                         // MARK: Display list of restaurants
-                        BusinessList()
-                        
+                        ZStack(alignment: .top) {
+                            
+                            BusinessList()
+                            
+                            HStack {
+                                // Push the Yelp icon to the right with the Spacer
+                                Spacer()
+                                // MARK: Yelp Icon
+                                YelpAttribution(link: "https://yelp.com")
+                            }
+                            .padding(.trailing, -20) // Make the Yelp icon have no space on the right; up against edge
+                            
+                        }
                     }
                         // Add padding to all of the elements in our VSTack
                         .padding([.horizontal, .top])

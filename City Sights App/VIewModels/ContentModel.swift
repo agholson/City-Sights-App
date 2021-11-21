@@ -29,6 +29,9 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
     @Published var restaurants = [Business]()
     @Published var sights = [Business]()
     
+    // Shows the user's human readable location
+    @Published var placemark: CLPlacemark?
+    
     // Overrides the NSObject's init method
     override init() {
         // Call the init of the superclass, the NSObject
@@ -79,6 +82,20 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
         // If we get the user's location, then we don't need to continue asking for it
         if userLocation != nil {
             locationManager.stopUpdatingLocation()
+            
+            // MARK: Get User City
+            let geoCoder = CLGeocoder()
+            
+            // Take the current location, and make it human readable
+            geoCoder.reverseGeocodeLocation(userLocation!) { placemarks, error in
+                
+                // Check that there are no errors
+                if error == nil && placemarks != nil {
+                    
+                    // Use the first placemark
+                    self.placemark = placemarks?.first
+                }
+            }
             
             // MARK: Call Yelp API
             // Grab the arts category
