@@ -37,9 +37,11 @@ class ContentModel: NSObject, CLLocationManagerDelegate, ObservableObject {
         // Set the contentModel as the delegate of the location manager
         locationManager.delegate = self
         
-        // Request user's location permission
+    }
+    
+    func requestGeolocationPermission() {
+        // Request permission from the user
         locationManager.requestWhenInUseAuthorization()
-        
     }
     
     // MARK: - Location Manager Delegate Methods
