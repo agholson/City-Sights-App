@@ -1,8 +1,8 @@
 # City Sights App
-This app displays the best restaurants near the current user based on the https://codewithchris.com iOS
- Foundations module 6.
+This app displays the best restaurants and sights near the current user as shown by Yelp. It is  
+ based on the https://codewithchris.com iOS Foundations Module 6. Highly recommend Code with Chris+, which teaches you 
+ the fundamentals and beyond for iOS development. It also provides a thriving community.
 
-It interacts with the Yelp API, as well as the CoreLocation framework to grab the user's location.
 
 # Getting User Location
 Add to the pslist, or the Info target tab a new key explaining the use of this information:
@@ -40,14 +40,46 @@ and the time it took to grab the response along with much more data.
 
 
 # App Design
+
+## LaunchView
+This view asks for the user's permission, and explains why we need it. It will handle situations, where the user denies access to the location
+as well. 
+
+![Displays the first launch view](img/launchView1.png)
+
+![Launch view 2](img/launchView2.png)
+
+### DeniedView
+If the user does not give the location, then we show this view. This tells the user the app cannot function. It allows him or her to 
+change the previously chosen location permission.
+
+![Display the denied view](img/deniedView.png)
+
+### Launching the Settings from the app
+The following code block shows how to open the settings for your particular app.
+```
+// Open settings
+if let url = URL(string: UIApplication.openSettingsURLString) {
+
+// Determines whether/ not it can open the URL
+if UIApplication.shared.canOpenURL(url) {
+    // Open the URL 
+    UIApplication.shared.open(url)
+}
+```
+
+
 ## HomeView
-This view displays a list of restaurants as well as sights in the area based on the closest distance to the user.
+This view displays a list of restaurants as well as sights in the area based on the closest distance to the user. 
+It only displays after determining the user's permission to locate them, and loads the closest destinations based on the Yelp
+API.
 
 ![HomeView screenshot](img/home_view.png)
 
-
 ## Business Detail View
 Shows details on the business itself, closed/ open, hours, phone, etc.
+
+![Displays the details for a business](img/business_detail_view.png)
 
 ### Launching Other Apps
 You can use one of the URLSchemes shown in the following document in order to open the phone, Messages,
@@ -65,15 +97,17 @@ http://maps.apple.com/?ll=50.894967,4.341626
 Meanwhile, if we want calculated directions we refer to the `MKDirections` class: 
 https://developer.apple.com/documentation/mapkit/mkdirections.
 
-## Launching the Settings from the app
-You can make it, so the app opens the settings page.
-```
-/ Open settings
-if let url = URL(string: UIApplication.openSettingsURLString) {
+The `BusinessDetailView` provides this directions button as well. You can see how it was made in the `DirectionsMap` View in 
+`Views -> Home -> Map -> DirectionsMap`. It plots annotations on the map with an overlay (a line in Apple terms) on how to 
+reach a particular destination with a given starting point.
 
-// Determines whether/ not it can open the URL
-if UIApplication.shared.canOpenURL(url) {
-    // Open the URL 
-    UIApplication.shared.open(url)
-}
-```
+![Map directions view](img/mapDirectionsView.png)
+
+## Business Map View
+The `BusinessMap` View marks on the map the 10 destinations found in the `HomeView` screen from the Yelp API. It uses Apple's 
+`annotations` to display the business name above each point as well.
+
+![Business map view](img/businessMap.png)
+
+If you click the point, then you can click the `i` icon it will bring up the Business Details view shown above.
+  
